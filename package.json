@@ -1,0 +1,13 @@
+{
+  "name": "yugioh",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "elm-live src/Main.elm --output=public/js/elm.js --dir=public --debug --pushstate --open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
