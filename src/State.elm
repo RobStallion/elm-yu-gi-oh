@@ -7,23 +7,23 @@ import Request.Card exposing (..)
 initialModel : Model
 initialModel =
     { count = 0
-    , card = MCard "" "" "" "" "" "" ""
+    , card = Card "" "" "" "" "" "" ""
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( initialModel, getCard )
+    ( initialModel, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        CountUp ->
-            ( { model | count = model.count + 1 }, Cmd.none )
+        GetCard ->
+            ( model, getCard )
 
         ReceiveCard (Err err) ->
             ( model, Cmd.none )
 
         ReceiveCard (Ok card) ->
-            ( { model | card = card.card }, Cmd.none )
+            ( { model | card = card }, Cmd.none )

@@ -13,22 +13,19 @@ cardUrl name =
 
 getCard : Cmd Msg
 getCard =
-    Http.get (cardUrl "dark magician") cardObjDecoder |> Http.send ReceiveCard
+    Http.get (cardUrl "dark magician") cardDecoder |> Http.send ReceiveCard
 
 
-cardDecoder : Json.Decoder MCard
+cardDecoder : Json.Decoder Card
 cardDecoder =
-    decode MCard
-        |> required "name" string
-        |> required "image_path" string
-        |> required "text" string
-        |> required "type" string
-        |> required "attack" string
-        |> required "defense" string
-        |> required "stars" string
-
-
-cardObjDecoder : Json.Decoder CardObj
-cardObjDecoder =
-    decode CardObj
-        |> required "card" cardDecoder
+    Json.field "card"
+        (decode
+            Card
+            |> required "name" string
+            |> required "image_path" string
+            |> required "text" string
+            |> required "type" string
+            |> optional "attack" string "attack"
+            |> optional "defense" string "defense"
+            |> optional "stars" string "stars"
+        )

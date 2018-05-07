@@ -4,21 +4,11 @@ import Http
 
 
 type Msg
-    = CountUp
-    | ReceiveCard (Result Http.Error CardObj)
+    = GetCard
+    | ReceiveCard (Result Http.Error Card)
 
 
-type Card
-    = Monster
-    | Spell
-
-
-type alias CardObj =
-    { card : MCard
-    }
-
-
-type alias MCard =
+type alias Card =
     { name : String
     , img : String
     , text : String
@@ -31,5 +21,5 @@ type alias MCard =
 
 type alias Model =
     { count : Int
-    , card : MCard
+    , card : Card
     }
