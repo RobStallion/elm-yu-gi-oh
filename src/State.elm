@@ -1,13 +1,15 @@
 module State exposing (..)
 
+import Request.Card exposing (getCard)
+import Request.Deck exposing (getDeck)
 import Types exposing (..)
-import Request.Card exposing (..)
 
 
 initialModel : Model
 initialModel =
     { count = 0
     , card = Card "" "" "" "" "" "" ""
+    , deck = []
     }
 
 
@@ -22,8 +24,17 @@ update msg model =
         GetCard ->
             ( model, getCard )
 
+        GetDeck ->
+            ( model, getDeck )
+
         ReceiveCard (Err err) ->
             ( model, Cmd.none )
 
         ReceiveCard (Ok card) ->
             ( { model | card = card }, Cmd.none )
+
+        ReceiveDeck (Err err) ->
+            ( model, Cmd.none )
+
+        ReceiveDeck (Ok deck) ->
+            ( { model | deck = deck }, Cmd.none )

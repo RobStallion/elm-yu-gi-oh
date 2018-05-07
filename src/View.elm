@@ -9,5 +9,6 @@ view : Model -> Html Msg
 view model =
     div []
         [ h1 [] [ text "Yu-Gi-Oh duel monsters game" ]
-        , button [ onClick GetCard ] [ text "test button" ]
+        , button [ onClick GetCard ] [ text "get dark magician" ]
+        , button [ onClick GetDeck ] [ text "get starter deck: yugi" ]
         ]
