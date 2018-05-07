@@ -1,40 +1,33 @@
 module State exposing (..)
 
-import Request.Card exposing (getCard)
-import Request.Deck exposing (getDeck)
+import Request.Card exposing (getCardFromAPI)
+import Request.Deck exposing (getDeckFromAPI)
 import Types exposing (..)
 
 
 initialModel : Model
 initialModel =
     { count = 0
-    , card = Card "" "" "" "" "" "" ""
     , deck = []
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( initialModel, Cmd.none )
+    ( initialModel, getDeckFromAPI )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        GetCard ->
-            ( model, getCard )
-
-        GetDeck ->
-            ( model, getDeck )
-
         ReceiveCard (Err err) ->
             ( model, Cmd.none )
 
         ReceiveCard (Ok card) ->
-            ( { model | card = card }, Cmd.none )
+            ( { model | deck = card :: model.deck }, Cmd.none )
 
-        ReceiveDeck (Err err) ->
+        ReceiveDeckNames (Err err) ->
             ( model, Cmd.none )
 
-        ReceiveDeck (Ok deck) ->
-            ( { model | deck = deck }, Cmd.none )
+        ReceiveDeckNames (Ok names) ->
+            ( model, Cmd.batch <| List.map (\a -> getCardFromAPI a) names )

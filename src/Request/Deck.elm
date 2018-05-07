@@ -10,9 +10,9 @@ deckUrl string =
     "https://www.ygohub.com/api/set_info?name=" ++ string
 
 
-getDeck : Cmd Msg
-getDeck =
-    Http.get (deckUrl "starter deck: yugi") deckDecoder |> Http.send ReceiveDeck
+getDeckFromAPI : Cmd Msg
+getDeckFromAPI =
+    Http.get (deckUrl "starter deck: yugi") deckDecoder |> Http.send ReceiveDeckNames
 
 
 deckDecoder : Json.Decoder (List String)

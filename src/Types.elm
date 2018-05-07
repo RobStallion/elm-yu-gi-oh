@@ -4,10 +4,8 @@ import Http
 
 
 type Msg
-    = GetCard
-    | ReceiveCard (Result Http.Error Card)
-    | GetDeck
-    | ReceiveDeck (Result Http.Error (List String))
+    = ReceiveCard (Result Http.Error Card)
+    | ReceiveDeckNames (Result Http.Error (List String))
 
 
 type alias Card =
@@ -23,6 +21,5 @@ type alias Card =
 
 type alias Model =
     { count : Int
-    , card : Card
-    , deck : List String
+    , deck : List Card
     }
