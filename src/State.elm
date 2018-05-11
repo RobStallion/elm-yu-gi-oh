@@ -43,7 +43,7 @@ update msg model =
 
         DrawCard int ->
             { model
-                | hand = List.take int model.deck
+                | hand = List.append model.hand <| List.take int model.deck
                 , deck = List.drop int model.deck
             }
                 ! []
