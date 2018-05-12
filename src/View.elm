@@ -11,11 +11,11 @@ view model =
     div []
         [ h1 [] [ text "Yu-Gi-Oh duel monsters game" ]
         , button [ class "pointer", onClick Shuffle ] [ text "Shuffle" ]
-        , button [ class "pointer", onClick <| DrawCard <| 6 - List.length model.hand ] [ text "Draw" ]
-        , div [ class "flex justify-around h5" ] <| List.map displayCard model.hand
-        , div [ class "flex justify-around h5" ] <| List.map displayCard model.field.player1
-        , div [ class "flex justify-around h5" ] <| List.map displayCard model.field.player2
-        , div [ class "flex justify-around h5" ] <| List.map displayCard model.hand
+        , button [ class "pointer", onClick <| DrawCard <| 6 - List.length model.player1.hand ] [ text "Draw" ]
+        , div [ class "flex justify-around h5" ] <| List.map displayCard model.player1.hand
+        , div [ class "flex justify-around h5" ] <| List.map displayCard model.player1.field
+        , div [ class "flex justify-around h5" ] <| List.map displayCard model.player2.field
+        , div [ class "flex justify-around h5" ] <| List.map displayCard model.player2.hand
         ]
 
 
