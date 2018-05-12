@@ -3,6 +3,13 @@ module Types exposing (..)
 import Http
 
 
+type alias Model =
+    { count : Int
+    , hand : List Card
+    , monsters : List Card
+    }
+
+
 type Msg
     = ReceiveCard (Result Http.Error Card)
     | ReceiveDeckNames (Result Http.Error (List String))
@@ -19,11 +26,4 @@ type alias Card =
     , attack : String
     , defence : String
     , stars : String
-    }
-
-
-type alias Model =
-    { count : Int
-    , deck : List Card
-    , hand : List Card
     }

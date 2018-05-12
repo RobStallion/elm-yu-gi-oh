@@ -10,9 +10,9 @@ view : Model -> Html Msg
 view model =
     div []
         [ h1 [] [ text "Yu-Gi-Oh duel monsters game" ]
-        , button [ onClick Shuffle ] [ text "Shuffle" ]
-        , button [ onClick <| DrawCard <| 6 - List.length model.hand ] [ text "Draw" ]
-        , div [] <| List.map displayCard model.hand
+        , button [ class "pointer", onClick Shuffle ] [ text "Shuffle" ]
+        , button [ class "pointer", onClick <| DrawCard <| 6 - List.length model.hand ] [ text "Draw" ]
+        , div [ class "flex justify-around" ] <| List.map displayCard model.hand
         ]
 
 

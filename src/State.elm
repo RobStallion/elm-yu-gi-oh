@@ -10,7 +10,7 @@ import Types exposing (..)
 initialModel : Model
 initialModel =
     { count = 0
-    , deck = []
+    , monsters = []
     , hand = []
     }
 
@@ -27,7 +27,10 @@ update msg model =
             model ! []
 
         ReceiveCard (Ok card) ->
-            { model | deck = card :: model.deck } ! []
+            if card.card_type == "Monster" then
+                { model | monsters = card :: model.monsters } ! []
+            else
+                model ! []
 
         ReceiveDeckNames (Err err) ->
             model ! []
@@ -36,14 +39,14 @@ update msg model =
             model ! List.map getCardFromAPI names
 
         Shuffle ->
-            model ! [ generate ReceiveShuffledDeck <| shuffle model.deck ]
+            model ! [ generate ReceiveShuffledDeck <| shuffle model.monsters ]
 
         ReceiveShuffledDeck shuffled_deck ->
-            { model | deck = shuffled_deck } ! []
+            { model | monsters = shuffled_deck } ! []
 
         DrawCard int ->
             { model
-                | hand = List.append model.hand <| List.take int model.deck
-                , deck = List.drop int model.deck
+                | hand = List.append model.hand <| List.take int model.monsters
+                , monsters = List.drop int model.monsters
             }
                 ! []

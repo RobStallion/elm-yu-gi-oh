@@ -9,12 +9,11 @@ import Types exposing (..)
 
 cardUrl : String -> String
 cardUrl name =
-    Regex.replace Regex.All
+    Regex.replace
+        Regex.All
         (Regex.regex "#")
         (\_ -> "%23")
-    <|
-        "https://www.ygohub.com/api/card_info?name="
-            ++ name
+        ("https://www.ygohub.com/api/card_info?name=" ++ name)
 
 
 getCardFromAPI : String -> Cmd Msg
