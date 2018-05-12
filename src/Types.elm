@@ -4,9 +4,8 @@ import Http
 
 
 type alias Model =
-    { count : Int
-    , hand : List Card
-    , monsters : List Card
+    { player1 : Player
+    , player2 : Player
     }
 
 
@@ -16,6 +15,7 @@ type Msg
     | Shuffle
     | ReceiveShuffledDeck (List Card)
     | DrawCard Int
+    | PlayCard Card
 
 
 type alias Card =
@@ -26,4 +26,11 @@ type alias Card =
     , attack : String
     , defence : String
     , stars : String
+    }
+
+
+type alias Player =
+    { hand : List Card
+    , deck : List Card
+    , field : List Card
     }

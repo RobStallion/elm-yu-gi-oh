@@ -9,9 +9,8 @@ import Types exposing (..)
 
 initialModel : Model
 initialModel =
-    { count = 0
-    , monsters = []
-    , hand = []
+    { player1 = Player [] [] []
+    , player2 = Player [] [] []
     }
 
 
@@ -28,7 +27,7 @@ update msg model =
 
         ReceiveCard (Ok card) ->
             if card.card_type == "Monster" then
-                { model | monsters = card :: model.monsters } ! []
+                { model | player1 = addToPlayerDeck card model.player1 } ! []
             else
                 model ! []
 
@@ -39,14 +38,44 @@ update msg model =
             model ! List.map getCardFromAPI names
 
         Shuffle ->
-            model ! [ generate ReceiveShuffledDeck <| shuffle model.monsters ]
+            model ! [ generate ReceiveShuffledDeck <| shuffle model.player1.deck ]
 
         ReceiveShuffledDeck shuffled_deck ->
-            { model | monsters = shuffled_deck } ! []
+            { model | player1 = updateDeck shuffled_deck model.player1 } ! []
 
         DrawCard int ->
-            { model
-                | hand = List.append model.hand <| List.take int model.monsters
-                , monsters = List.drop int model.monsters
-            }
-                ! []
+            { model | player1 = drawCard int model.player1 } ! []
+
+        PlayCard card ->
+            { model | player1 = placeCardOnField card model.player1 } ! []
+
+
+drawCard : Int -> Player -> Player
+drawCard int player =
+    { player
+        | deck = List.drop int player.deck
+        , hand = List.append player.hand <| List.take int player.deck
+    }
+
+
+updateDeck : List Card -> Player -> Player
+updateDeck cardList player =
+    { player | deck = cardList }
+
+
+addToPlayerDeck : Card -> Player -> Player
+addToPlayerDeck card player =
+    { player | deck = card :: player.deck }
+
+
+filterCard : Card -> List Card -> List Card
+filterCard card cardList =
+    List.filter (\x -> x /= card) cardList
+
+
+placeCardOnField : Card -> Player -> Player
+placeCardOnField card player =
+    { player
+        | hand = filterCard card player.hand
+        , field = card :: player.field
+    }
