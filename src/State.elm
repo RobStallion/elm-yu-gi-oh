@@ -16,38 +16,64 @@ initialModel =
 
 init : ( Model, Cmd Msg )
 init =
-    ( initialModel, getDeckFromAPI )
+    initialModel
+        ! [ getDeckFromAPI "starter deck: yugi" Yugi
+          , getDeckFromAPI "starter deck: joey" Joey
+          ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        ReceiveCard (Err err) ->
+        ReceiveDeckNames _ (Err err) ->
             model ! []
 
-        ReceiveCard (Ok card) ->
+        ReceiveDeckNames player (Ok names) ->
+            model ! List.map (\name -> getCardFromAPI name player) names
+
+        ReceiveCard _ (Err err) ->
+            model ! []
+
+        ReceiveCard pName (Ok card) ->
             if card.card_type == "Monster" then
-                { model | player1 = addToPlayerDeck card model.player1 } ! []
+                case pName of
+                    Yugi ->
+                        { model | player1 = addToPlayerDeck card model.player1 } ! []
+
+                    Joey ->
+                        { model | player2 = addToPlayerDeck card model.player2 } ! []
             else
                 model ! []
 
-        ReceiveDeckNames (Err err) ->
-            model ! []
-
-        ReceiveDeckNames (Ok names) ->
-            model ! List.map getCardFromAPI names
-
         Shuffle ->
-            model ! [ generate ReceiveShuffledDeck <| shuffle model.player1.deck ]
+            model
+                ! [ generate (ReceiveShuffledDeck Yugi) <| shuffle model.player1.deck
+                  , generate (ReceiveShuffledDeck Joey) <| shuffle model.player2.deck
+                  ]
 
-        ReceiveShuffledDeck shuffled_deck ->
-            { model | player1 = updateDeck shuffled_deck model.player1 } ! []
+        ReceiveShuffledDeck pName shuffled_deck ->
+            case pName of
+                Yugi ->
+                    { model | player1 = updateDeck shuffled_deck model.player1 } ! []
 
-        DrawCard int ->
-            { model | player1 = drawCard int model.player1 } ! []
+                Joey ->
+                    { model | player2 = updateDeck shuffled_deck model.player2 } ! []
 
-        PlayCard card ->
-            { model | player1 = placeCardOnField card model.player1 } ! []
+        DrawCard int pName ->
+            case pName of
+                Yugi ->
+                    { model | player1 = drawCard int model.player1 } ! []
+
+                Joey ->
+                    { model | player2 = drawCard int model.player2 } ! []
+
+        PlayCard card pName ->
+            case pName of
+                Yugi ->
+                    { model | player1 = placeCardOnField card model.player1 } ! []
+
+                Joey ->
+                    { model | player2 = placeCardOnField card model.player2 } ! []
 
 
 drawCard : Int -> Player -> Player

@@ -16,9 +16,9 @@ cardUrl name =
         ("https://www.ygohub.com/api/card_info?name=" ++ name)
 
 
-getCardFromAPI : String -> Cmd Msg
-getCardFromAPI str =
-    Http.get (cardUrl str) cardDecoder |> Http.send ReceiveCard
+getCardFromAPI : String -> PlayerName -> Cmd Msg
+getCardFromAPI cardName pName =
+    Http.get (cardUrl cardName) cardDecoder |> Http.send (ReceiveCard pName)
 
 
 cardDecoder : Json.Decoder Card

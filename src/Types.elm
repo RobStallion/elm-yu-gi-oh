@@ -10,12 +10,27 @@ type alias Model =
 
 
 type Msg
-    = ReceiveCard (Result Http.Error Card)
-    | ReceiveDeckNames (Result Http.Error (List String))
+    = ReceiveCard PlayerName (Result Http.Error Card)
+    | ReceiveDeckNames PlayerName (Result Http.Error (List String))
     | Shuffle
-    | ReceiveShuffledDeck (List Card)
-    | DrawCard Int
-    | PlayCard Card
+    | ReceiveShuffledDeck PlayerName (List Card)
+    | DrawCard Int PlayerName
+    | PlayCard Card PlayerName
+
+
+type PlayerName
+    = Yugi
+    | Joey
+
+
+getName : PlayerName -> String
+getName playerName =
+    case playerName of
+        Yugi ->
+            "yugi"
+
+        Joey ->
+            "joey"
 
 
 type alias Card =
